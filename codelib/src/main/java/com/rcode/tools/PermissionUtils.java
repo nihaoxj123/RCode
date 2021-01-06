@@ -6,15 +6,7 @@ import android.os.Build;
 
 /**
  * 申请权限工具类
- *      通过调用getInstance()方法获取实例，传OnPermissionCallback的接口实现类，
- *          void onGranted(int requestCode, String permission) 已授权的权限，通过setPermissions的第三个参数传入的权限遍历，每遍历一次判断一次，如果遍历某个权限已授权的，则回调这个方法
- *          void onDenied(int requestCode, String permission) 未授权的权限，通过setPermissions的第三个参数传入的权限遍历，每遍历一次判断一次，如果遍历某个权限未授权的，则回调这个方法
- *          void onFinish(int requestCode, boolean grantedAll) 遍历permissions完成，permissions中的所有权限都授权，grantedAll = trues 否则 = false
- *      使用方法
- *          在onCreate中调用
- *              PermissionUtils permission = PermissionUtils.getInstance().setPermissions;
- *          在onRequestPermissionsResult中调用
- *              permission.onRequestPermissionsResult
+ *      https://www.jianshu.com/p/13140041eeab
  */
 public class PermissionUtils {
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  * 防止重复弹出多个对话框，当先弹出的对话框关闭后，再弹出下一个对话框
+ * https://www.jianshu.com/p/844e57dc891b
  */
 public class NoRepeatDialog extends AlertDialog implements DialogInterface.OnDismissListener {
 

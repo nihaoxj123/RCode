@@ -4,6 +4,7 @@ import android.view.View;
 
 /**
  * 防止用户恶意疯狂点击
+ * https://www.jianshu.com/p/ab7de1159f60
  */
 public abstract class OnClickListener implements View.OnClickListener {
 
