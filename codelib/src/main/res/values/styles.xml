@@ -14,4 +14,16 @@
         <!--无标题 -->
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <declare-styleable name="ViewFlipper">
+        <attr name="bgColor" format="color"/>
+        <attr name="slideType" format="enum">
+            <enum name="top" value="1"/>
+            <enum name="bottom" value="2"/>
+            <enum name="left" value="3"/>
+            <enum name="right" value="4"/>
+        </attr>
+        <attr name="radius" format="dimension"/>
+    </declare-styleable>
+
 </resources>
