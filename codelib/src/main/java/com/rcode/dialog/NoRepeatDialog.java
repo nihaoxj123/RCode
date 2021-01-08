@@ -1,4 +1,4 @@
-package com.rcode.dialog;
+package com.rCode.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,7 +19,7 @@ public class NoRepeatDialog extends AlertDialog implements DialogInterface.OnDis
     private int showNextDialogDelay;
 
     public NoRepeatDialog(Activity activity) {
-        super(activity, com.rcode.R.style.dialog);
+        super(activity, com.rCode.R.style.dialog);
         this.activity = activity;
         dialogList = new ArrayList<>();
         super.setOnDismissListener(this);
@@ -115,12 +115,24 @@ public class NoRepeatDialog extends AlertDialog implements DialogInterface.OnDis
     public static abstract class OnDialogListener {
         private int layoutId;
         private AlertDialog dialog;
+        private Object data;
+
+        public OnDialogListener() {
+        }
+
+        public OnDialogListener(Object data) {
+            this.data = data;
+        }
+
+        public Object getData() {
+            return data;
+        }
 
         public abstract void onClose();
 
         public abstract void onShow();
 
-        public <T extends View> T findViewById(int id) {
+        public <V extends View> V findViewById(int id) {
             return dialog.findViewById(id);
         }
     }

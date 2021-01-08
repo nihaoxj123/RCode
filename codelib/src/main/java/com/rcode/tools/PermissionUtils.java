@@ -1,4 +1,4 @@
-package com.rcode.tools;
+package com.rCode.tools;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -15,20 +15,66 @@ public class PermissionUtils {
     private Activity activity;
     private String[] permissions;
 
-
-    /**
-     * 获取实例
-     * @param onPermissionCallback
-     * @return
-     */
-    public static PermissionUtils getInstance(Activity activity,OnPermissionCallback onPermissionCallback) {
-        return new PermissionUtils(activity,onPermissionCallback);
+    public PermissionUtils(Activity activity,int requestCode,String ... permissions) {
+        this.activity = activity;
+        this.requestCode = requestCode;
+        this.permissions = permissions;
     }
 
-    private PermissionUtils(Activity activity,OnPermissionCallback onPermissionCallback) {
-        if (onPermissionCallback == null) throw new RuntimeException("onPermissionCallback 不能为 null");
-        this.activity = activity;
+    /**
+     * 设置授权的权限
+     * @param onPermissionCallback 授权的权限
+     * @return
+     */
+    public PermissionUtils checkPermission(OnPermissionCallback onPermissionCallback) {
         this.onPermissionCallback = onPermissionCallback;
+        check();
+        return this;
+    }
+
+    /**
+     * 检查是否已授权，如果未授权，则发起授权
+     */
+    private void check(){
+        if (isPermission() == false){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                for (int i = 0; i < permissions.length; i++) {
+                    if (activity.checkSelfPermission(permissions[i]) != PackageManager.PERMISSION_GRANTED) { //未授权
+                        activity.requestPermissions(permissions, requestCode);  //申请权限
+                        return;
+                    }
+                }
+            }
+        }
+        if (onPermissionCallback != null) {
+            onPermissionCallback.onFinish(requestCode,true);
+        }
+    }
+
+    /**
+     * 是否已授权
+     * @return
+     */
+    public boolean isPermission(){
+        return isPermission(activity,permissions);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        if (onPermissionCallback == null) {
+            return;
+        }
+        if (this.requestCode == requestCode){
+            boolean isGrantedAll = true;
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                    onPermissionCallback.onGranted(requestCode,permissions[i]);
+                }else {
+                    isGrantedAll = false;
+                    onPermissionCallback.onDenied(requestCode,permissions[i]);
+                }
+            }
+            onPermissionCallback.onFinish(requestCode,isGrantedAll);
+        }
     }
 
     /**
@@ -46,73 +92,6 @@ public class PermissionUtils {
             }
         }
         return true;
-    }
-
-    /**
-     * 设置授权的权限
-     * @param requestCode
-     * @param permissions 授权的权限
-     * @return
-     */
-    public PermissionUtils setPermissions(int requestCode,String ... permissions) {
-        if (this.permissions != null){
-            return this;
-        }
-        this.requestCode = requestCode;
-        this.permissions = permissions;
-        checkPermission();
-        return this;
-    }
-
-    /**
-     * 发起申请permissions中的权限
-     * @return
-     */
-    public void permission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (activity.checkSelfPermission(permissions[i]) != PackageManager.PERMISSION_GRANTED) { //未授权
-                    activity.requestPermissions(permissions, requestCode);  //申请权限
-                    return;
-                }
-            }
-        }
-        onPermissionCallback.onFinish(requestCode,true);
-    }
-
-    /**
-     * 检查是否已授权，如果未授权，则发起授权
-     */
-    private void checkPermission(){
-        if (isPermission() == false){
-            permission();
-        }else {
-            onPermissionCallback.onFinish(requestCode,true);
-        }
-
-    }
-
-    /**
-     * 是否已授权
-     * @return
-     */
-    public boolean isPermission(){
-        return isPermission(activity,permissions);
-    }
-
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
-        if (this.requestCode == requestCode){
-            boolean isGrantedAll = true;
-            for (int i = 0; i < grantResults.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED){
-                    onPermissionCallback.onGranted(requestCode,permissions[i]);
-                }else {
-                    isGrantedAll = false;
-                    onPermissionCallback.onDenied(requestCode,permissions[i]);
-                }
-            }
-            onPermissionCallback.onFinish(requestCode,isGrantedAll);
-        }
     }
 
     public interface OnPermissionCallback{

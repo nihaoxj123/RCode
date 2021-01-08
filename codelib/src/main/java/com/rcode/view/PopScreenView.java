@@ -1,4 +1,4 @@
-package com.rcode.view;
+package com.rCode.view;
 
 import android.content.Context;
 import android.graphics.Color;

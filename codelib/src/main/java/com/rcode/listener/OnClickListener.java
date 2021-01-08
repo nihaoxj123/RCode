@@ -1,4 +1,4 @@
-package com.rcode.listener;
+package com.rCode.listener;
 
 import android.view.View;
 
@@ -12,10 +12,13 @@ public abstract class OnClickListener implements View.OnClickListener {
     private long time;  //上次点击时间
 
     public OnClickListener() {
-        delay = 500;
+        this(500);
     }
 
     public OnClickListener(long delay) {
+        if (delay < 0){
+            delay = 500;
+        }
         this.delay = delay;
     }
 
