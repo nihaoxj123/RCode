@@ -26,4 +26,8 @@
         <attr name="radius" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="PopScreenView">
+        <attr name="speed" format="integer"/>
+    </declare-styleable>
+
 </resources>

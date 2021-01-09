@@ -47,6 +47,14 @@ public class ViewFlipper extends ViewGroup {
         }
     }
 
+    public void setType(int type) {
+        if (type > 4 || type < 1){
+            this.mType = 1;
+            return;
+        }
+        this.mType = type;
+    }
+
     public void setAdapter(Adapter adapter) {
         this.adapter = adapter;
         initView();
@@ -85,6 +93,13 @@ public class ViewFlipper extends ViewGroup {
             params2.width = v2.getMeasuredWidth();
             params2.height = v2.getMeasuredHeight();
 
+            if (bgV == null){
+                int maxWidth = Math.max(params1.width,params2.width);
+                int maxHeight = Math.max(params1.height,params2.height);
+                setMeasuredDimension(maxWidth, maxHeight);
+                return;
+            }
+
             setMeasuredDimension(params1.width, params1.height);
             return;
         }
@@ -101,6 +116,7 @@ public class ViewFlipper extends ViewGroup {
         if (v1 != null && v2 != null){
             LayoutParams params1 = (LayoutParams) v1.getLayoutParams();
             v1.layout(0,params1.top,params1.width,params1.getBottom());
+            v2.layout(0,0,0,0);
         }
     }
 
